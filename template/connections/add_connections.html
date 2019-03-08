@@ -1,0 +1,173 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/custom/add_connections.css' %}">
+<link rel="stylesheet" href="{% static 'css/custom/stylish_scrollbar.css' %}">
+<section class="container" id="chat_div">
+	<header>
+		<h3>Add New Connections  </h3>	
+	</header>
+	<div class="card">
+		<div class="card-header">
+			<h6>Search Users: </h6>
+			<div class="row" >
+				<div class="col-md-12" >
+					<form action="{{ request.get_full_path }}" method="get">
+						<div class="input-group" style="background-color: white;">
+							<span class="input-group-prepend">
+								<div class="input-group-text bg-transparent border-right-0"><i class="fa fa-search"></i></div>
+							</span>
+							<input class="form-control py-2 border-left-0 border" type="search" id="search" name="search" value="{{ request.GET.search }}">
+							<span class="input-group-append">
+								<button class="btn btn-outline-primary border-left-0 border" type="button">
+									Search
+								</button>
+							</span>
+						</div>
+					</form>
+				</div>
+			</div>
+			<span >
+				{% if request.GET.search != None and  request.GET.search != '' %}
+				<label class="mr-4" >Search Results for : {{ request.GET.search }}</label>
+				Page Index : 
+				{% endif %}
+				{{ users }}				
+			</span>
+
+			<hr>			
+		</div>
+		<div class="card-body">
+			<div class="row" > 
+				{% for user in users %}
+				
+				<div class="col-6 mt-1 ">
+					<div class="col-12 searched_user" style="border-width:1px;border-style: solid;">
+						<div class="row">
+							<div class="col-3">
+								<img src="/media/system/no_user_img.jpg" alt="{{ user.username }}" class="img-responsive mr-3 searched_user_img" style="height: 98px;width: 98px;">							
+							</div>
+							<div class="col-8">
+								<div class="col-9 text-truncate">
+									<label title="{{ user.first_name }} {{ user.last_name }}">
+										{{ user.first_name }} {{ user.last_name }}
+										<br>
+										<small style="font-weight: 200;" title="{{ user.username }}">Username : {{ user.username }}</small>
+									</label>
+								</div>
+								<div class="col">
+									{%if user != request.user %}
+									{% if user.connection == None %}
+									<form action="{% url 'connections:add_connection' %}" method="post" class="connect_form">
+										{% csrf_token %}
+										<input type="hidden"  value="{{user.id}}" name="connect_with_user_id" >
+										<input type="hidden" name="next" value="{{ request.get_full_path }}">
+										
+										<button class="btn btn-outline-light btn-sm " ><i class="fas fa-plug"></i>&nbsp;Connect</button>
+									</form>
+									{%elif user.connection.accepted_at != None %}
+									<form action="{% url 'connections:delete_connection' %}" method="post" class="connect_form">
+										{% csrf_token %}
+										<input type="hidden"  value="{{user.connection.id}}" name="connection_id" >
+										<input type="hidden" name="next" value="{{ request.get_full_path }}">
+
+										<div class="dropdown">
+											<button class="btn btn-outline-success btn-sm  dropdown-toggle" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="connected_btn">
+												<i class="fab fa-connectdevelop"></i>&nbsp;Connected
+											</button>
+											<div class="dropdown-menu" aria-labelledby="connected_btn">
+												<button class="dropdown-item"><i class="fas fa-unlink text-danger"></i>&nbsp;Disconnect</button>
+
+											</div>
+										</div>
+									</form>
+									{% elif user.connection.accepted_at == None %}
+									{% if user.connection.req_from == request.user %}
+									<form action="{% url 'connections:delete_connection' %}" method="post" class="connect_form">
+										{% csrf_token %}
+										<input type="hidden"  value="{{user.connection.id}}" name="connection_id" >
+										<input type="hidden" name="next" value="{{ request.get_full_path }}">
+										
+										<div class="dropdown">
+											<button class="btn btn-outline-info btn-sm  dropdown-toggle" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="request_sent_btn">
+												<i class="fas fa-user-plus"></i>&nbsp;Request Sent
+											</button>
+											<div class="dropdown-menu" aria-labelledby="request_sent_btn">
+												<button class="dropdown-item"><i class="fas fa-user-times text-danger"></i>&nbsp;Cancel Request</button>
+
+											</div>
+										</div>
+									</form>
+									{% elif user.connection.req_to == request.user %}				
+
+									<div class="dropdown">
+										<button class="btn btn-outline-primary btn-sm  dropdown-toggle" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="request_sent_btn">
+											<i class="fas fa-reply-all"></i>&nbsp;Respond to Request
+										</button>
+										<div class="dropdown-menu" aria-labelledby="request_sent_btn">
+											<form action="{% url 'connections:delete_connection' %}" method="post" class="connect_form">
+												{% csrf_token %}
+												<input type="hidden"  value="{{user.connection.id}}" name="connection_id" >
+												<input type="hidden" name="next" value="{{ request.get_full_path }}">
+												<button class="dropdown-item"><i class="fas fa-user-times text-danger"></i>&nbsp;Cancel Request</button>
+											</form>
+											<form action="{% url 'connections:confirm_connection' %}" method="post" class="connect_form">
+												{% csrf_token %}
+												<input type="hidden"  value="{{user.connection.id}}" name="connection_id" >
+												<input type="hidden" name="next" value="{{ request.get_full_path }}">
+												<button class="dropdown-item"><i class="fas fa-user-check text-success"></i>&nbsp;Confirm Request</button>
+											</form>
+										</div>
+									</div>								
+									
+									
+									
+									{% endif %}
+									{% endif %}
+									{% endif %}
+
+
+								</div>
+							</div>
+						</div>
+						
+					</div>
+
+				</div>
+
+				{% endfor %}				
+				
+			</div>
+		</div>
+		<div class="card-footer">
+			{{ users }}	
+			{% if users.has_other_pages %}
+			<ul class="pagination">
+				{% if users.has_previous %}
+				<li class="page-item" ><a class="page-link" href="?page={{ users.previous_page_number }}">&laquo;</a></li>
+				{% else %}
+				<li class="page-item disabled"><a class="page-link">&laquo;</a></li>
+				{% endif %}
+				{% for i in users.paginator.page_range %}
+				{% if users.number == i %}
+				<li class="page-item active"><a class="page-link">{{ i }} <span class="sr-only">(current)</span></a></li>
+				{% elif users.paginator.num_pages > 6 and i > users.number and i < pagination_pages_until %}
+				<li class="page-item" ><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+				{% elif users.paginator.num_pages < 6 %}
+				<li class="page-item" ><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>				
+				{% endif %}
+				{% endfor %}
+				{% if users.has_next %}
+				<li class="page-item"><a class="page-link" href="?page={{ users.next_page_number }}">&raquo;</a></li>
+				{% else %}
+				<li class="page-item disabled"><a class="page-link">&raquo;</a></li>
+				{% endif %}
+			</ul>
+			{% endif %}
+		</div>
+	</div>
+</section>
+
+{% endblock content%}

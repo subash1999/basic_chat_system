@@ -1,0 +1,50 @@
+<div class="card register_card m-2">
+	<div class="card-header">
+		<h2 class="register_title" >Register</h2>
+	</div>
+	<div class="card-body ">
+		<form action="{% url 'accounts:register' %}" method="post" id="register_form" class="mr-xl-4 ml-xl-3 mb-xl-2 mt-xl-2 m-lg-2 m-md-2 m-sm-2 m-2">			
+			{% csrf_token %}
+			<div class="form-group">
+				<label for="name" class="form-control-label"><i class="fas fa-user" style="color: aqua;"></i>&nbsp;&nbsp;Name : </label>			
+				<div class="form-inline">
+					<input name="fname" id="fname" type="text" class="form-control m-2 " placeholder="First Name" autocomplete="off" required="required" minlength='2' maxlength='255'>
+					<input name="lname" id="lname" type="text" class="form-control m-2 " placeholder="Last Name" autocomplete="off" required="required" minlength='2' maxlength='255'>		
+					<br id="name_error">
+				</div>
+
+			</div>
+
+			<div class="form-group">
+				<label for="username" class="form-control-label" ><i class="fa fa-user-circle" style="color:aqua;"></i>&nbsp;&nbsp;Username : </label>
+				<input name="username" id="username" type="text" class="form-control" required="required" autocomplete="off"  minlength='2' maxlength='255'>
+			</div>
+
+			<div class="form-group" >
+				<label for="password" class="form-control-label" ><i class="fas fa-key" style="color:aqua;"></i>&nbsp;&nbsp;Password : <small>(Min 6 Characters)</small></label>
+				<input  name="password" id="password" type="password" class="form-control" required="required" autocomplete="off" minlength='2' maxlength='255'>
+			</div>
+
+			<div class="form-group" >
+				<label for="password_confirmation" class="form-control-label" ><i class="fa fa-check-circle" style="color:aqua;"></i>&nbsp;&nbsp;Password Confirmation : </label>
+				<input name="password_confirmation" id="password_confirmation" type="password" class="form-control" required="required" autocomplete="off" minlength='2' maxlength='255'>
+			</div>
+
+			<input type="submit" class="btn btn-lg btn-outline-info float-right mr-3" value="Register">
+			
+			<label class="w-100 mt-2">Already a Member ??</label>
+			<span class="w-100 h5 btn btn-outline-warning" id="login_now_btn">Login Now</span>
+
+		</form>
+		
+	</div>
+
+	
+</div>
+</div>
+
+<script>
+	var check_username_available_url = "{% url 'accounts:check_username' %}";	
+</script>
+<!-- Register Card ended -->
+

@@ -1,0 +1,40 @@
+
+<!-- Login Form -->
+<div class="card login_card m-2">
+	<div class="card-header">
+		<h2 class="login_title" >Login</h2>
+	</div>
+	<div class="card-body contacts_body">
+		<form action="{% url 'accounts:login' %}" method="post" id="login_form" >
+			{% csrf_token %}
+			<div class="form-group">
+				<label for="username" class="form-control-label" ><i class="fa fa-user-circle" style="color:aqua;"></i>&nbsp;&nbsp;Username : </label>
+				<input name="username" id="username" type="text" class="form-control"  required="required">
+			</div>
+
+			<div class="form-group" >
+				<label for="password" class="form-control-label" ><i class="fas fa-key" style="color:aqua;"></i>&nbsp;&nbsp;Password : </label>
+				<input name="password" type="password" class="form-control" required="required">
+				
+				<br>
+				
+				<a class="form-control-label mt-2 mb-2" href="#" style="color:#eeaaaa;opacity: 0.6" > <i class="fa fa-lock"></i></i> Forgot Password?</a>
+			
+			</div>
+
+			<input type="submit" class="btn btn-lg btn-outline-warning float-right mr-3" value="Login">
+			
+			<label class="w-100 mt-2">Not a Member ??<br></label>
+			<span class="w-100 btn btn-outline-info" id="register_now_btn" >Register Now</span>
+
+		</form>
+		
+	</div>
+
+	<div class="card-footer">
+		
+	</div>
+</div>
+</div>
+<!-- Login card ended -->
+

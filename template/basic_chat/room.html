@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block content %}
+<section class="container" id="chat_section">
+	<br>
+  <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
+  <input id="chat-message-input" type="text" size="100"/><br/>
+  <input id="chat-message-submit" type="button" value="Send"/>
+    
+  <!-- the script is for the reconnecting websockets -->
+  <script src="{% static 'js/reconnecting-websocket.min.js' %}"></script>
+  <script>
+     $(document).ready(function() {
+        var roomName = {{ room_name_json }};
+
+        var wsStart = 'ws://'
+        if(window.location.protocal == 'https:'){
+            wsStart = 'wss://'
+        }
+        var chatSocket = new ReconnectingWebSocket(
+            wsStart + window.location.host +
+            '/ws/chat/' + roomName + '/');
+
+        chatSocket.onopen = function open() {
+        };
+        chatSocket.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            var message = data['message'];
+            var data_about = data['data_about'];
+            if(data_about=='chat'){
+                document.querySelector('#chat-log').value += (message + '\n');
+            }
+            else if(data_about=='public_key'){
+                $('#chat_section').append("<input type='hidden' value='"+message+"' id='public_key'/>");
+
+
+            }
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+
+        if (chatSocket.readyState == WebSocket.OPEN) {
+            socket.onopen();
+        }
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'data_about':'chat',
+            'message': message,
+        }));
+
+        messageInputDom.value = '';
+    };
+});
+</script>
+</section>
+
+<!-- Below two scripts is for the ecnyption implementation -->
+<!-- Downloaded forge for different kind of encryption mechanism -->
+<!-- <script src="{% static 'js/forge.all.min.js' %}"></script> -->
+<!-- cusotm made rsa encryption using forge rsa encryption -->
+<!-- <script src="{% static 'js/custom/rsa_encryption.js' %}"></script> -->
+
+
+{% endblock content %}

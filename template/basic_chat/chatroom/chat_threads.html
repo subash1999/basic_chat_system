@@ -1,0 +1,124 @@
+
+<div class="card mb-sm-3 mb-md-0 contacts_card">
+	<div class="card-header ">
+		<div class="row">
+			<div class="d-flex bd-highlight">
+				<h6 style="color:white;">Chat App</h6>
+				<div class="chat_settings ">
+					<span class="action_menu_btn" id="settings_menu_btn"><i class="fas fa-cog"></i></span>
+					<div class="action_menu" id="settings_menu">
+						<ul>
+							<li><i class="fas fa-user-circle"></i> View profile</li>
+							<li><a href="{% url 'connections:add_connection' %}" target="_blank" class="dropdown_link"><i class="fas fa-users"></i> Add Connections</a></li>
+							<li><i class="fas fa-plus"></i> Add to group</li>
+							 <a href="{% url 'accounts:logout' %}"><li><i class="fas fa-sign-out-alt"></i>Logout</li></a>
+						</ul>
+					</div>
+				</div>
+
+
+			</div>
+
+		</div>	
+		<div class="logined_user_info">
+
+			<div class="img_cont">
+				<img src="https://devilsworkshop.org/files/2013/01/enlarged-facebook-profile-picture.jpg" class="rounded-circle user_img img-fluid">
+
+			</div>
+			<span class="username d-none d-md-block text-truncate ">Maryam Naz</span>
+			<style>
+			.toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 20px; }
+			.toggle.ios .toggle-handle { border-radius: 20px; }
+			.slow .toggle-group { 
+				transition: left 1s;
+				-webkit-transition: left 1s; }
+			</style>
+			<div class="w-100"></div>
+			<input type="checkbox" checked class="mt-2 mr-2" 
+			data-toggle="toggle" 
+			data-style="ios slow" 
+			data-size="small" 
+			data-onstyle="success" 
+			data-offstyle="secondary"
+			data-on="Online" 
+			data-off="Offline"
+			>
+<i class="fas fa-file-medical text-light fa-2x float-right mt-2" style="cursor: pointer;" title="New Message"></i>
+		</div>
+		
+		<div class="input-group p-xs-1 p-1 p-sm-1 p-md-1 p-lg-2 p-xl-2">
+			<input type="text" placeholder="Search..." name="" class="form-control search">
+			<div class="input-group-prepend">
+				<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+			</div>
+		</div>
+						
+	</div>
+	<div class="card-body contacts_body">
+		
+		<ui class="contacts">
+			<li class="active">
+				<div class="d-flex bd-highlight">
+					<div class="img_cont">
+						<img src="https://devilsworkshop.org/files/2013/01/enlarged-facebook-profile-picture.jpg" class="rounded-circle user_img img-fluid">
+						<span class="online_icon"></span>
+					</div>
+					<div class="user_info d-none d-md-block">
+						<span>Maryam Naz</span>
+						<p>Maryam is online</p>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="d-flex bd-highlight">
+					<div class="img_cont">
+						<img src="https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg" class="rounded-circle user_img img-fluid">
+						<span class="online_icon offline"></span>
+					</div>
+					<div class="user_info d-none d-md-block">
+						<span>Sahar Darya</span>
+						<p>Sahar left 7 mins ago</p>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="d-flex bd-highlight">
+					<div class="img_cont">
+						<img src="https://i.pinimg.com/originals/54/6e/6d/546e6d4c6ce4322e6aa3b2f8ca73ac28.jpg" class="rounded-circle user_img img-fluid">
+						<span class="online_icon"></span>
+					</div>
+					<div class="user_info d-none d-md-block">
+						<span>Yolduz Rafi</span>
+						<p>Yolduz is online</p>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="d-flex bd-highlight">
+					<div class="img_cont">
+						<img src="http://profilepicturesdp.com/wp-content/uploads/2018/07/sweet-girl-profile-pictures-9.jpg" class="rounded-circle user_img img-fluid">
+						<span class="online_icon offline"></span>
+					</div>
+					<div class="user_info d-none d-md-block">
+						<span>Nargis Hawa</span>
+						<p>Nargis left 30 mins ago</p>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="d-flex bd-highlight">
+					<div class="img_cont">
+						<img src="https://www.freshmorningquotes.com/wp-content/uploads/2015/11/cute-and-beautifull-girls-profile-pictures.jpg" class="rounded-circle user_img img-fluid">
+						<span class="online_icon offline"></span>
+					</div>
+					<div class="user_info d-none d-md-block">
+						<span>Khadija Mehr</span>
+						<p>Khadija left 50 mins ago</p>
+					</div>
+				</div>
+			</li>
+		</ui>
+	</div>
+	<div class="card-footer"></div>
+</div>

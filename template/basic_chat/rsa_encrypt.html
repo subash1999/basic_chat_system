@@ -1,0 +1,14 @@
+{% load static %}
+<script src="{% static 'forge/dist/forge.all.min.js' %}"></script>
+<!-- the process of key -->
+<script>
+	var public = `b'-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCy86WtQ5TMMshKIrorG2SXeQFZ\nZHIq0w3+Q84u+h4SQkoPKpflVDFc92fIxYo3PopotZ77yqzmVlF4zhTl7qlnP1fs\nOCuv61XRqAmlGPcdzt5+S2N92tVj9zRu8gZ8pADAP0/OlKEwEVweP/TBhkjZuSx1\nMRx+oTPivxZWJPm0fQIDAQAB\n-----END PUBLIC KEY-----'`;
+	var publicKey = forge.pki.publicKeyFromPem(public);
+	var secretMessage = “user input goes here”;
+	var encrypted = publicKey.encrypt(secretMessage, "RSA-OAEP", {
+		md: forge.md.sha256.create(),
+		mgf1: forge.mgf1.create()
+	});
+	var base64 = forge.util.encode64(encrypted);
+	console.log('Encrypted : \n'+base64);
+</script>
