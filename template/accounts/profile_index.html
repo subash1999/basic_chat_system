@@ -1,0 +1,46 @@
+{% extends "accounts/profile.html" %}
+{% load static %}
+{% block center_section %}
+    
+
+<h3>Your Information</h3>
+<div>
+	<div class="row">
+
+		<div class="col-8">
+			<h6>Account Info &nbsp;&nbsp;<i class="fas fa-edit fa-lg pointer" title="Edit Account Info"></i></h6>
+			
+			<label class="text-truncate col-10" title="{{request.user.get_full_name}}">Name : {{request.user.get_full_name}}</label>&nbsp;&nbsp;
+
+			<label class="text-truncate col-10" title="{{request.user.username}}">Username : {{request.user.username}}</label>&nbsp;&nbsp;	
+			<label class="text-truncate col-10" titile="{% if request.user.profile.gender != None %}{{ request.user.profile.gender }}{% endif %}">Gender : {% if request.user.profile.gender != None %}{{ request.user.profile.gender }}{% endif %}</label>&nbsp;&nbsp;	
+
+			<label class="text-truncate col-10" title="{% if request.user.profile.dob != None %}{{ request.user.profile.dob }}{% endif %}">DOB : {% if request.user.profile.dob != None %}{{ request.user.profile.dob }}{% endif %}</label>&nbsp;&nbsp;
+			<br>
+			<span style="font-weight: bold">About</span> <br>
+			<p> 
+				{% if request.user.profile.about != None %}{{ request.user.profile.about }}{% endif %}
+			</p>&nbsp;&nbsp;
+			
+		</div>
+		<div class="col-4">						
+			<img src="{{request.user.profile.profile_pic.photo}}" alt="" height="120px" width="120px">
+		</div>
+	</div>
+</div>
+<hr>
+<div>
+	<h6>Connections</h6>
+	<label class="text-truncate col-10" title="{{user.num_connected_users}}">Total Connections : {{user.num_connected_users}}&nbsp;&nbsp;<i class="fas fa-eye fa-lg pointer" title="View Connections"></i></label>
+	<br>
+	<label class="text-truncate col-10" title="{{user.num_connect_requests}}">
+		Connect Requests : {{user.num_connect_requests}}&nbsp;&nbsp;<i class="fas fa-eye fa-lg pointer" title="View Connect Requests"></i>
+	</label>
+
+</div>
+<hr>
+<div>
+	<h6>Photos &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-sm btn-info">View All</button></h6>
+	<label class="text-truncate col-10" title="{{user.num_photos}}">Total Photos : {{user.num_photos}}</label>
+</div>
+{% endblock center_section %}

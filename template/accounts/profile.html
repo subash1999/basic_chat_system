@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/custom/profile.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/custom/stylish_scrollbar.css' %}">
+
+<section class="container pt-1" id="profile_section">
+	<div class="row">
+		<div class="col-3">
+			<!-- user card -->
+			<div class="card">
+				<img src="{{request.user.profile.profile_pic.photo}}" alt="" class="card-img-top rounded-circle" height="180px">
+				<div class="card-body text-light">
+					
+
+				</div>
+			</div>
+			<!-- account information card -->
+			<div class="card mt-1">
+				<div class="card-header text-warning text-capitalize"><h5 align="center">Account Info</h5></div>
+				<div class="card-body ">
+					<ul class="text-light">
+						<li title="List Your Connections">
+							<a href="#" class="text-light">
+								Manage Connections&nbsp;<i class="fab fa-connectdevelop"></i>
+							</a>
+						</li>
+						<li title="Add Your Connections">
+							<a href="#" class="text-light">
+								Connect Requests&nbsp;<i class="fas fa-users"></i>
+							</a>
+						</li>
+						<li title="Your Messages">
+							<a href="#" class="text-light">
+								Messages&nbsp;<i class="fa fa-comments"></i>
+							</a>
+						</li>
+						<li title="Manage Your Photos">
+							<a href="#" class="text-light">
+								My Photos&nbsp;<i class="far fa-image"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- account settings card -->
+			<div class="card mt-1">
+				<div class="card-header text-warning text-capitalize"><h5 align="center">Account Settings</h5></div>
+				<div class="card-body ">
+					<ul class="text-light">
+						<li title="Username and Password Management">
+							<a href="{% url 'accounts:auth_setting' %}" class="text-light">
+								Authentication&nbsp;<i class="fas fa-shield-alt"></i>
+							</a>
+						</li>
+						<li title="Information like your Name,Contact">
+							<a class="text-light" href="#">
+								General Info&nbsp;<i class="fas fa-info-circle"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-8 border-secondary" id="center_div">
+			<!-- navigation bar for the search bar -->
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark mt-2" >
+
+				<a class="navbar-brand text-light text-truncate" href="{% url 'accounts:profile' %}" style="max-width: 400px;" title="{{request.user.username}}">
+					<img src="/media/system/no_user_img.jpg" width="30" height="30" alt="">
+					&nbsp;&nbsp;
+					{{request.user.get_full_name}} <small>({{request.user.username}})</small>
+				</a>
+				
+
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item active">
+						<a class="nav-link " href="{% url 'accounts:logout' %}"><li><i class="fas fa-sign-out-alt"></i>Logout</li></a>
+					</li>
+				</ul>
+			</nav>
+			<section class="container m-3" id="center_section">
+				{% block center_section %}
+
+				{% endblock center_section %}
+			</section>
+		</div>
+	</div>
+</section>
+
+{% endblock content %} 

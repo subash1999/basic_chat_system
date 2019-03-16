@@ -14,7 +14,7 @@ $(document).ready(function() {
 			},
 			username: {
 				required: true,
-				rangelength : [2,255],
+				rangelength : [2,50],
 				remote: {
 					url: check_username_available_url,
 					type: "post",

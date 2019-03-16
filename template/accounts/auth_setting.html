@@ -1,0 +1,84 @@
+{% extends "accounts/profile.html" %}
+{% load static %}
+{% block center_section %}
+<link rel="stylesheet" href="{% static 'css/custom/auth_setting.css' %}">
+<script src="{% static 'js/jquery.validate.min.js' %}"></script>
+<script>
+	var check_username_available_url = "{% url 'accounts:check_username' %}"
+</script>
+<script src="{% static 'js/custom/auth_setting.js' %}" ></script>
+
+<h3>Authentication Setting</h3>
+<div>
+	<h5>Username</h5>
+	<form action="{% url 'accounts:change_username' %}" method="POST" class="m-4" id="change_username_form">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="username" id="username_label" >{{request.user.username}}</label>
+			<input type="text" class="form-control" name="username" id="username" value="{{request.user.username}}" maxlength="50" minlength="2">
+		</div>
+		<div class="form-group">
+			<button type="button" class="btn btn-secondary" id="edit_username_btn"><i class="fas fa-edit fa-lg pointer" title="Edit Username"></i>&nbsp;Edit</button>
+			<button type="button" class="btn btn-secondary" id="cancel_username_btn" onclick="location.reload()">&nbsp;Cancel</button>
+			<button class="btn btn-primary" id="save_username_btn"><i class="fas fa-check fa-lg pointer" title="Save Username"></i>&nbsp;Save</button>
+		</div>		
+	</form>
+</div>
+<hr>
+<div>
+	<h5>Change Password</h5>
+	<form action="{% url 'accounts:change_password' %}" method="POST" class="m-4" id="change_password_form">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="password" id="password_label">Old Password </label>
+			<input type="password" class="form-control" name="old_password" id="old_password">
+		</div>
+		<div class="form-group">
+			<label for="password" id="password_label">New Password </label>
+			<input type="password" class="form-control" name="new_password" id="new_password">
+		</div>
+		<div class="form-group">
+			<label for="password" id="password_label">New Password Confirmation&nbsp;&nbsp;<i class="far fa-check-circle"></i></label>
+			<input type="password" class="form-control" name="new_password_confirmation" id="new_password_confirmation">
+		</div>
+		<div class="form-group">
+			<button class="btn btn-primary" id="save_password_btn"><i class="fas fa-check fa-lg pointer" title="Save Password"></i>&nbsp;Save</button>
+		</div>			
+	</form>
+</div>
+<hr>
+<hr>
+<div>
+	<h5>Delete Account</h5>
+	<p class="ml-4">Deleting your account will disconnect you form your connections. You will no longer be able to contact them using our platform. <br><span style="font-weight: bold;font-style: italic;" class="text-capitalize">Please Be absolutely sure before Deleting your account. There is no turning back</span></p>
+	<div align="center">
+		<button type="button" class="btn btn-sm btn-danger mb-5" data-toggle="modal" data-target="#delete_confirmation_modal">Yes I am Sure</button>
+	</div>
+	<!-- Delete confirmation Modal -->
+	<div class="modal fade bg-danger" id="delete_confirmation_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Confirm Account Deletion</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form action="{% url 'accounts:delete_account' %}" method="POST" >
+					{% csrf_token %}				
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="password" class="form-control-label" >Your Password : </label>
+							<input type="password" class="from-control form-control-sm" name="password">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-success" data-dismiss="modal"><i class="far fa-smile-beam"></i>&nbsp;Close</button>
+						<button class="btn btn-info"><i class="far fa-frown"></i>&nbsp;Delete Account</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock center_section %}

@@ -9,3 +9,16 @@ class UserEmailVerify(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 	def __str__(self):
 		return self.is_verified
+
+class Photo(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	photo = models.TextField()
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_pic = models.OneToOneField(Photo,on_delete=models.CASCADE)
+    gender = models.CharField(max_length=20,null=True,blank=True,default=None)
+    birth_date = models.DateField(null=True, blank=True,default=None)
+    about = models.TextField(null=True,blank=True,default=None)
+    status = models.CharField(default='Online',max_length=50)
+
