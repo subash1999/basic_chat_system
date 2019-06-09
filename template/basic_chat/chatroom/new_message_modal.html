@@ -1,3 +1,14 @@
+{% load static %}
+<script>
+  var connected_users_search_url = `{% url "accounts:connected_users_search" %}`;
+  var loader = `{% include "includeables/loader.html" %}`;
+  var new_msg_url = `{% url "chat:new_msg" %}`;
+  var csrf_token = `{% csrf_token %}`;
+</script>
+<link defer rel="stylesheet" href="{% static 'css/custom/new_message_modal.css' %}">
+<script defer src="{% static 'js/custom/new_message_modal.js' %}"></script>
+
+
 <!-- Modal -->
 <div class="modal  fade " id="new_message_modal" tabindex="-1" role="dialog" aria-labelledby="new_message_modal_label" aria-hidden="true" role="dialog">
   <div class="modal-dialog modal-lg" >
@@ -9,10 +20,10 @@
         </button>
 
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="">
 
         <div class="input-group p-xs-1 p-1 p-sm-1 p-md-1 p-lg-2 p-xl-2">
-          <input type="text" placeholder="Search..." name="" class="form-control search" id="search_users">
+          <input type="text" placeholder="Search..." name="search_users" class="form-control search" id="search_users">
           <div class="input-group-prepend">
             <span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
           </div>
@@ -23,11 +34,9 @@
         <nav>
           <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="connected_users_tab" data-toggle="tab" href="#nav_connected_users" role="tab" aria-controls="nav_connected_users" aria-selected="true">Connected Users</a>
-            <a class="nav-item nav-link" id="other_users_tab" data-toggle="tab" href="#nav_other_users" role="tab" aria-controls="nav_other_users" aria-selected="false">Other Users</a>
-
           </div>
         </nav>
-        
+
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="nav_connected_users" role="tabpanel" aria-labelledby="connected_users_tab">
             <div class="m-2" align="center" id="connected_users_loader">
@@ -35,14 +44,7 @@
               {% include "includeables/loader.html" %}
             </div>
           </div>
-          <div class="tab-pane fade show " id="nav_other_users" role="tabpanel" aria-labelledby="other_users_tab">
-            <div class="m-2" align="center" id="other_users_loader">
-              <label class="m-2">Loading Other Users</label>
-              {% include "includeables/loader2.html" %}              
-            </div>
-          </div>
-        </div>
-
+        </div>        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -50,33 +52,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  var search = $('search_users').val();
-  $.ajax({
-    url: '{% url "accounts:connected_users_search" %}',
-    type: 'GET',
-    dataType: 'json',
-    data: {'search': search},
-  })
-  .done(function(users) {
-    showConnectedUsers(users);
-  })
-  .fail(function() {
-    console.log("error");
-  })
-  .always(function() {
-    console.log("complete");
-  });
-  
-</script>
-<script>
-  function showConnectedUsers(users) {
-    var html = '';
-    users.forEach(function (item,index) {      
-      html +=item.fields.username+'<br><hr>';
-    });
-    $('#nav_connected_users').html(html);
-
-  }
-</script>

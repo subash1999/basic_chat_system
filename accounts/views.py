@@ -8,10 +8,12 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q,Count
 from django.core import serializers
 from django.contrib.auth.hashers import check_password
+from django.utils.datastructures import MultiValueDictKeyError
+from django.core.paginator import Paginator
 
 import json
 import time
-
+ 
 from connections.models import Connection 
 from .models import UserEmailVerify,Profile,Photo
 
@@ -23,7 +25,7 @@ def login(request):
 			if user is not None:
 				auth.login(request,user)
 				messages.add_message(request,messages.SUCCESS,'Successfull Login')
-				return redirect('basic:index')
+				return redirect('accounts:profile')
 			else:
 				messages.add_message(request,messages.ERROR,'Either Username or password is wrong')
 				return redirect('accounts:login')		
@@ -120,14 +122,45 @@ def connectedUsersSearch(request):
 		username = user.username.lower()
 		first_name = user.first_name.lower()
 		last_name = user.last_name.lower()
+		user.profile_pic = user.profile.profile_pic.photo
 		# searching in the connected_users
-		if(search!=None and search!=''):
+		if(search != None and search != ''):
 			if (search in username) or (search in first_name) or (search in last_name):
 				searched_users.append(user)
 		else:
 			searched_users.append(user)
-	data = serializers.serialize('json', searched_users)
-	return HttpResponse(data, content_type="application/json")
+	paginator = Paginator(searched_users, 10)
+	page = 1
+	if (request.GET.get('page') is not None):
+		page = request.GET.get('page')
+	searched_users = paginator.get_page(page)
+	
+	has_next_page = True
+	if not searched_users.has_next():
+		has_next_page = False
+	has_previous_page = True
+	if not searched_users.has_previous():
+		has_previous_page = False
+
+	datas = []	
+	for user in searched_users:
+		data = {
+		'id' : user.id,
+		'username' : user.username,
+		'first_name' : user.first_name,
+		'last_name' : user.last_name,
+		'profile_pic' : str(user.profile.profile_pic.photo),
+		'status' : user.profile.status,
+		}
+		datas.append(data)
+	data_to_send = {}
+	data_to_send['users'] = datas
+	data_to_send['has_next_page'] = has_next_page
+	data_to_send['has_previous_page'] = has_previous_page
+
+	data_to_send = json.dumps(data_to_send)
+	# data = serializers.serialize('json', searched_users)
+	return HttpResponse(data_to_send, content_type="application/json")
 
 def profile(request):
 	connected_connections = Connection.objects.filter(Q(req_from=request.user)|
@@ -149,6 +182,41 @@ def authSetting(request):
 		'page_title' : str(request.user.get_full_name())+': Authentication Settings',
 	}
 	return render(request,'accounts/auth_setting.html',data)
+
+def generalSetting(request):
+	if request.method == 'POST':
+		user = User.objects.get(pk=request.user.id)
+		if request.FILES.get('profile_pic') != None :
+			try : 
+				image = request.FILES['profile_pic']
+				photo_obj = Photo()
+				photo_obj.photo = image
+				photo_obj.user = user
+				photo_obj.save()
+
+				photo_obj.photo = '/media/'+str(photo_obj.photo)
+				photo_obj.save()
+
+				user.profile.profile_pic = photo_obj
+				user.profile.save()			
+			except MultiValueDictKeyError:
+				messages.add_message(request,messages.ERROR,"Invalid Request ")
+		if request.POST.get('dob') != None and request.POST.get('dob') != "":
+			user.profile.dob = request.POST['dob']
+		else :
+			user.profile.dob = None
+		user.profile.gender = request.POST['gender']
+		user.profile.about = request.POST['about']	
+		user.profile.save()
+
+		user.first_name = request.POST['first_name']
+		user.last_name = request.POST['last_name']
+		user.save()
+
+	data = {
+		'page_title' : str(request.user.get_full_name())+': General Settings',
+	}
+	return render(request,'accounts/general_setting.html',data)
 
 def changeUsername(request):
 	if request.method == 'POST':

@@ -1,3 +1,8 @@
+{% load static %}
+<!-- links and script related to this part of the webpage -->
+<link rel="stylesheet" href="{% static 'css/bootstrap-toggle.min.css' %}">
+<script src="{% static 'js/bootstrap-toggle.min.js' %}"></script>
+<script src="{% static 'js/custom/chat_threads.js' %}"></script>
 
 <div class="card mb-sm-3 mb-md-0 contacts_card">
 	<div class="card-header ">
@@ -23,10 +28,10 @@
 		<div class="logined_user_info">
 
 			<div class="img_cont">
-				<img src="https://devilsworkshop.org/files/2013/01/enlarged-facebook-profile-picture.jpg" class="rounded-circle user_img img-fluid">
+				<img src="{{ request.user.profile.profile_pic.photo }}" class="rounded-circle user_img img-fluid">
 
 			</div>
-			<span class="username d-none d-md-block text-truncate ">Maryam Naz</span>
+			<span class="username d-none d-md-block text-truncate ">{{ request.user.first_name }} {{ request.user.last_name }}</span>
 			<style>
 			.toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 20px; }
 			.toggle.ios .toggle-handle { border-radius: 20px; }
@@ -35,7 +40,10 @@
 				-webkit-transition: left 1s; }
 			</style>
 			<div class="w-100"></div>
-			<input type="checkbox" checked class="mt-2 mr-2" 
+			<input type="checkbox" 
+			{% if request.user.profile.status == 'Online' %}checked {% endif %} 
+			class="mt-2 mr-2"
+			id="online_status_checkbox" 
 			data-toggle="toggle" 
 			data-style="ios slow" 
 			data-size="small" 
@@ -44,6 +52,9 @@
 			data-on="Online" 
 			data-off="Offline"
 			>
+			<script>
+				var update_status_url = "{% url 'chat:update_status' %}"
+			</script>
 			<i class="fas fa-file-medical text-light fa-2x float-right mt-2" style="cursor: pointer;" title="New Message" data-toggle="modal" data-target="#new_message_modal"></i>
 			{% include 'basic_chat/chatroom/new_message_modal.html' %}
 		</div>
@@ -59,6 +70,27 @@
 	<div class="card-body contacts_body">
 		
 		<ui class="contacts">
+			{%for thread in threads %}
+			<li class="{% if thread.thread_id == current_thread.thread_id %}chat_thread_active{% endif %}">
+				
+				<div class="d-flex bd-highlight">
+					<a href="{% url 'chat:chat' thread.thread_id %}">
+						
+						<div class="img_cont">
+							<img src="{{ thread.profile_pic }}" class="rounded-circle user_img img-fluid">
+							<span class="online_icon {% if thread.user.profile.status == 'Offline' %}offline {% endif %}"></span>
+						</div>
+					</a>
+					<div class="user_info d-none d-md-block">
+						<a href="{% url 'chat:chat' thread.thread_id %}">
+							<span>{{ thread.room_name }} </span>
+						</a>
+						<p>{% if thread.user.profile.status == 'Offline' %} Offline {% else %} Online {% endif %}</p>
+						
+					</div>
+				</div>				
+			</li>
+			{% endfor %}
 			<li class="chat_thread_active">
 				<div class="d-flex bd-highlight">
 					<div class="img_cont">

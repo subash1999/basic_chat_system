@@ -1,0 +1,74 @@
+{% extends "accounts/profile.html" %}
+{% load static %}
+{% block center_section %}
+
+<script defer src="{% static 'js/upload_preview.js' %}"></script>
+<script defer src="{% static '/js/jquery.validate.min.js' %}"></script>
+<script defer src="{% static 'js/custom/general_setting.js' %}"></script>
+
+<link rel="stylesheet" href="{% static 'css/upload_preview.css' %}">
+<link rel="stylesheet" href="{% static 'css/custom/general_setting.css' %}">
+
+<form action="{% url 'accounts:general_setting' %}" enctype='multipart/form-data' id="general_setting_form" method="POST">
+	{% csrf_token %}
+	<h3>General Setting
+		<button type="button" class="btn btn-secondary" id="edit_general_setting_btn"><i class="fas fa-edit fa-lg pointer" title="Edit General Info"></i>&nbsp;Edit</button>
+		<button type="button" class="btn btn-secondary" id="cancel_general_setting_btn" onclick="location.reload()">&nbsp;Cancel</button>
+
+		<button class="btn btn-primary" id="save_general_setting_btn"><i class="fas fa-check fa-lg pointer" title="Save General Info"></i>&nbsp;Save</button>
+	</h3>
+	<br>
+	<div align="center">
+		<div id="image-preview" >
+			<label for="image-upload" id="image-label" >Choose File</label>
+			<input type="file" name="profile_pic" id="profile_pic" class="general_setting_input" />
+			
+		</div>
+		<script>
+			var pp_url = "{{ request.user.profile.profile_pic.photo }}";
+		</script>
+		<div id="profile_pic_error"></div>
+	</div>
+	<hr>
+	<div>
+		<h5>Your Information</h5>
+		<div class="form-group">
+			<div class="form-inline">				
+				<label for="first_name" class="form-control-label" required minlength="2" maxlength="255">First Name : &nbsp;&nbsp;</label>
+				<input type="text" class="form-control general_setting_input " value="{{ request.user.first_name }}" id="first_name" name="first_name" >
+			</div>
+			&nbsp;&nbsp;
+			<div class="form-inline">				
+				<label for="last_name" class="form-control-label" required minlength="2" maxlength="255">Last Name : &nbsp;&nbsp;</label>
+				<input type="text" class="form-control general_setting_input " value="{{ request.user.last_name }}" id="last_name" name="last_name" >
+			</div>
+		</div>
+		<div class="form-group mt-4">
+			<div class="form-inline">
+				<label for="gender" class="form-control-label">Gender : &nbsp;&nbsp;</label>
+				<select class="form-control general_setting_input" name="gender" id="gender" >
+					<option value=""></option>
+					<option value="Male">Male</option>
+					<option value="Female">Female</option>
+					<option value="Other">Other</option>
+				</select>
+				{% if request.user.profile.gender != None %}
+				<script>
+					$('#gender').val('{{ request.user.profile.gender }}')
+				</script>				
+				{% endif %}
+			</div>
+			&nbsp;&nbsp;
+			<div class="form-inline">
+				<label for="dob" class="form-control-label">DOB : &nbsp;&nbsp;</label>
+				<input type="date" class="form-control general_setting_input" name="dob" id="dob" value="{% if request.user.profile.dob != None %}{{ request.user.profile.dob|date:'Y-m-d' }}{% endif %}">
+							
+			</div>
+		</div>
+	</div>
+	<div class="form-group mt-4">
+		<label for="about" class="form-control-label" style="font-weight: bold">About</label>
+		<textarea class="form-control general_setting_input" name="about" id="about" cols="30" rows="2" style="resize: none;">{% if request.user.profile.about != None %}{{ request.user.profile.about }}{% endif %}</textarea>
+	</div>
+</form>
+{% endblock center_section %}

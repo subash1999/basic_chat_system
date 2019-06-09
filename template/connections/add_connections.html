@@ -47,7 +47,7 @@
 					<div class="col-12 searched_user" style="border-width:1px;border-style: solid;">
 						<div class="row">
 							<div class="col-3">
-								<img src="/media/system/no_user_img.jpg" alt="{{ user.username }}" class="img-responsive mr-3 searched_user_img" style="height: 98px;width: 98px;">							
+								<img src="{{ user.profile.profile_pic.photo }}" alt="{{ user.username }}" class="img-responsive mr-3 searched_user_img" style="height: 98px;width: 98px;">							
 							</div>
 							<div class="col-8">
 								<div class="col-9 text-truncate">
@@ -107,18 +107,18 @@
 											<i class="fas fa-reply-all"></i>&nbsp;Respond to Request
 										</button>
 										<div class="dropdown-menu" aria-labelledby="request_sent_btn">
-											<form action="{% url 'connections:delete_connection' %}" method="post" class="connect_form">
-												{% csrf_token %}
-												<input type="hidden"  value="{{user.connection.id}}" name="connection_id" >
-												<input type="hidden" name="next" value="{{ request.get_full_path }}">
-												<button class="dropdown-item"><i class="fas fa-user-times text-danger"></i>&nbsp;Cancel Request</button>
-											</form>
 											<form action="{% url 'connections:confirm_connection' %}" method="post" class="connect_form">
 												{% csrf_token %}
 												<input type="hidden"  value="{{user.connection.id}}" name="connection_id" >
 												<input type="hidden" name="next" value="{{ request.get_full_path }}">
 												<button class="dropdown-item"><i class="fas fa-user-check text-success"></i>&nbsp;Confirm Request</button>
 											</form>
+											<form action="{% url 'connections:delete_connection' %}" method="post" class="connect_form">
+												{% csrf_token %}
+												<input type="hidden"  value="{{user.connection.id}}" name="connection_id" >
+												<input type="hidden" name="next" value="{{ request.get_full_path }}">
+												<button class="dropdown-item"><i class="fas fa-user-times text-danger"></i>&nbsp;Cancel Request</button>
+											</form>											
 										</div>
 									</div>								
 									

@@ -15,6 +15,8 @@ urlpatterns = [
    	path('change_username', views.changeUsername ,name='change_username'),
     path('change_password', views.changePassword ,name='change_password'),
     path('delete_account', views.deleteAccount ,name='delete_account'),
+    path('general_setting', views.generalSetting ,name='general_setting'),
+
 
     path('connected_users_search', views.connectedUsersSearch ,name='connected_users_search'),
     path('other_users_search', views.otherUsersSearch ,name='other_users_search'),

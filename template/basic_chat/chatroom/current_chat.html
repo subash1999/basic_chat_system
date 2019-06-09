@@ -6,18 +6,18 @@
 <script src="{% static 'js/custom/current_chat.js' %}"></script>
 <script>
 	var roomName = {{ room_name_json }};
-
+	var current_user_id = {{ request.user.id }};
 </script>
 <!-- The current ongoing chat -->
 <div class="card">
 	<div class="card-header msg_head">
 		<div class="d-flex bd-highlight">
 			<div class="img_cont">
-				<img src="https://devilsworkshop.org/files/2013/01/enlarged-facebook-profile-picture.jpg" class="rounded-circle user_img img-fluid" title="{{ room_name }}">
+				<img src="{{ current_thread.profile_pic }}" class="rounded-circle user_img img-fluid" title="{{ room_name }}">
 				<span class="online_icon"></span>
 			</div>
 			<div class="user_info">
-				<span>{{ room_name}}</span>
+				<span>{{ current_thread.room_name }}</span>
 				<p>1767 Messages</p>
 			</div>
 			<div class="video_cam">

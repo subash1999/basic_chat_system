@@ -16,7 +16,7 @@
 	<script defer src="{% static 'js/moment.min.js' %}"></script>	
 	<script defer src="{% static 'js/livestamp.min.js' %}"></script>
 	<!-- <script defer src="{% static 'js/lightbox.min.js' %}"></script> -->
- 
+
 </head>
 <body>
 	{% block content %}
@@ -50,13 +50,12 @@
 	{% if messages %}
 	{% for message in messages %}
 	<script>
-
 		toastr.{{message.tags}}("{{message}}")
 	</script>
 
 	{% endfor %}
 	{% endif %}
-
+	
 	
 	<script>
 		
@@ -87,6 +86,22 @@
     }
 });
 
+</script>
+<script>
+	function showToastrMsg(type,msg) {
+		if (type.toLowerCase() == 'error'){
+			toastr.error(msg);
+		}
+		else if (type.toLowerCase() == 'success'){
+			toastr.success(msg);
+		}
+		else if (type.toLowerCase() == 'warning'){
+			toastr.success(msg);
+		}
+		else{
+			toastr.error('Error Type not identified while showing toastr message in layout.html ')
+		}
+	}
 </script>
 
 

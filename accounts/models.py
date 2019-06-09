@@ -12,13 +12,13 @@ class UserEmailVerify(models.Model):
 
 class Photo(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
-	photo = models.TextField()
+	photo = models.ImageField()
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.OneToOneField(Photo,on_delete=models.CASCADE)
     gender = models.CharField(max_length=20,null=True,blank=True,default=None)
-    birth_date = models.DateField(null=True, blank=True,default=None)
+    dob = models.DateField(null=True, blank=True,default=None)
     about = models.TextField(null=True,blank=True,default=None)
     status = models.CharField(default='Online',max_length=50)
 
